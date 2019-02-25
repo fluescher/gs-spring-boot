@@ -1,21 +1,18 @@
 node('maven') {
   stage('build') {
-    openshift.withCluster() {
-      openshift.withProject() {
-        def bld = openshift.startBuild('${NAME}')
-        bld.untilEach {
-          return it.object().status.phase == "Running"
-        }
-        bld.logs('-f')
-      }  
+    sh "mvn clean package"
+    stash name:"binary", includes:"target/gs-spring-boot-0.1.0.jar"
+  }
+
+  parallel {
+    stage('Integration Tests') {
+      sh "echo TESTING"
+    },
+    stage('UI-Tests') {
+      sh "oc status"
     }
   }
   stage('deploy') {
-    openshift.withCluster() {
-      openshift.withProject() {
-        def dc = openshift.selector('dc', '${NAME}')
-        dc.rollout().latest()
-      }
-    }
+    sh "sleep 60"
   }
 }
