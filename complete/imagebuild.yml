@@ -1,0 +1,18 @@
+kind: "BuildConfig"
+apiVersion: "v1"
+metadata:
+  name: "application-image"
+spec:
+  source:
+    type: "Dockerfile"
+    dockerfile: "FROM overwritten\nADD gs-spring-boot-0.1.0.jar app.jar\n CMD java -jar app.jar"
+  output:
+    to:
+      kind: "ImageStreamTag"
+      name: "application-image:latest"
+  strategy:
+    type: Docker
+    dockerStrategy:
+      from:
+        kind: "DockerImage"
+        name: "openjdk:11-jre-slim"

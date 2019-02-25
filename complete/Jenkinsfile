@@ -1,18 +1,37 @@
 node('maven') {
-  stage('build') {
-    sh "mvn clean package"
-    stash name:"binary", includes:"target/gs-spring-boot-0.1.0.jar"
+  stage("Checkout") {
+    git url: "https://github.com/fluescher/gs-spring-boot.git", branch: "master"
+  }
+  stage('Build') {
+    git url: "https://github.com/fluescher/gs-spring-boot.git", branch: "master"
+    sh "ls -l"
+    sh "cd complete"
+
+    try {
+      sh "mvn -f complete/pom.xml clean package"
+    } finally {
+      junit 'complete/target/surefire-reports/**/*.xml'
+    }
+
+    stash name:"binary", includes:"complete/target/gs-spring-boot-0.1.0.jar"
   }
 
-  parallel {
-    stage('Integration Tests') {
+  stage ('Testing') {
+  parallel (
+    'Integration Tests': {
       sh "echo TESTING"
     },
-    stage('UI-Tests') {
+    'UI-Tests': {
       sh "oc status"
     }
+  )
   }
-  stage('deploy') {
-    sh "sleep 60"
+
+  stage('Build Image') {
+    sh "oc start-build application-image --from-file complete/target/gs-spring-boot-0.1.0.jar --wait"
+  }
+
+  stage('Deploy') {
+    sh "oc apply -f env"
   }
 }
