@@ -32,6 +32,6 @@ node('maven') {
   }
 
   stage('Deploy') {
-    sh "oc apply -f env"
+    sh "oc apply -f complete/env"
   }
 }
