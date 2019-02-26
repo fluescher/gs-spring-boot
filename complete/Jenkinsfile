@@ -31,6 +31,10 @@ node('maven') {
     sh "oc start-build application-image --from-file complete/target/gs-spring-boot-0.1.0.jar --wait"
   }
 
+  stage('Approval') {
+    input("Are you sure?")
+  }
+
   stage('Deploy') {
     sh "oc apply -f complete/env"
   }
