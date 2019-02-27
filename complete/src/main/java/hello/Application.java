@@ -2,6 +2,7 @@ package hello;
 
 import io.jaegertracing.internal.JaegerTracer;
 import io.jaegertracing.internal.reporters.RemoteReporter;
+import io.jaegertracing.thrift.internal.senders.HttpSender;
 import io.jaegertracing.thrift.internal.senders.UdpSender;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -35,12 +36,7 @@ public class Application {
 
     @Bean
     public io.opentracing.Tracer jaegerTracer() {
-        return new JaegerTracer.Builder("spring-boot")
-                .withReporter(new RemoteReporter.Builder()
-                        .withSender(new UdpSender("jaeger-agent", 6831, 0))
-                        .build()
-                )
-                .build();
+        return new JaegerTracer.Builder("spring-boot").build();
     }
 
 }

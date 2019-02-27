@@ -5,6 +5,11 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.spring.web.client.TracingRestTemplateInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +21,8 @@ public class HelloController {
 
     private final Counter greetingsServed;
     private final Tracer tracer;
+
+    private final static Logger logger = LoggerFactory.getLogger(HelloController.class);
 
     public HelloController(MeterRegistry registry, Tracer tracer) {
         this.greetingsServed = registry.counter("greetings.served");
@@ -44,7 +51,10 @@ public class HelloController {
 
     @RequestMapping("/slow")
     @Timed(value="time.slow-greetings")
-    public String slowGreeting() {
+    public String slowGreeting(@RequestHeader HttpHeaders request) {
+
+        logger.info("Received call with traceid: {}", request.get("uber-trace-id"));
+
 
         try {
             Thread.sleep((long)(Math.random() * 5000 + 5000));
