@@ -2,6 +2,9 @@ package hello;
 
 import java.util.Arrays;
 
+import io.jaegertracing.Configuration;
+import io.jaegertracing.internal.JaegerTracer;
+import io.jaegertracing.internal.samplers.ProbabilisticSampler;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -28,6 +31,12 @@ public class Application {
             }
 
         };
+    }
+
+    @Bean
+    public io.opentracing.Tracer jaegerTracer() {
+        return new JaegerTracer.Builder("spring-boot")
+                .build();
     }
 
 }
