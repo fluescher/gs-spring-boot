@@ -37,5 +37,7 @@ node('maven') {
 
   stage('Deploy') {
     sh "oc apply -f complete/env"
+    sh "oc rollout latest app-deployment"
+    sh "oc rollout status dc/app-deployment"
   }
 }
