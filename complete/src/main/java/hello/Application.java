@@ -1,15 +1,15 @@
 package hello;
 
-import java.util.Arrays;
-
-import io.jaegertracing.Configuration;
 import io.jaegertracing.internal.JaegerTracer;
-import io.jaegertracing.internal.samplers.ProbabilisticSampler;
+import io.jaegertracing.internal.reporters.RemoteReporter;
+import io.jaegertracing.thrift.internal.senders.UdpSender;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+
+import java.util.Arrays;
 
 @SpringBootApplication
 public class Application {
@@ -36,6 +36,10 @@ public class Application {
     @Bean
     public io.opentracing.Tracer jaegerTracer() {
         return new JaegerTracer.Builder("spring-boot")
+                .withReporter(new RemoteReporter.Builder()
+                        .withSender(new UdpSender("jaeger-agent", 6831, 64967))
+                        .build()
+                )
                 .build();
     }
 
