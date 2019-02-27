@@ -19,10 +19,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <!-- tag::actuator[] -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+
         <!-- end::actuator[] -->
         <!-- tag::tests[] -->
         <dependency>
@@ -31,6 +28,20 @@
             <scope>test</scope>
         </dependency>
         <!-- end::tests[] -->
+
+        <!-- Monitoring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
     </dependencies>
 
     <properties>
