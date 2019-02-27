@@ -37,7 +37,7 @@ public class Application {
     public io.opentracing.Tracer jaegerTracer() {
         return new JaegerTracer.Builder("spring-boot")
                 .withReporter(new RemoteReporter.Builder()
-                        .withSender(new UdpSender("jaeger-agent", 6831, 64967))
+                        .withSender(new UdpSender("jaeger-agent", 6831, 0))
                         .build()
                 )
                 .build();
