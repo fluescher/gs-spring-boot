@@ -1,6 +1,6 @@
-
-sh "ls -al"
-
+node {
+	sh "ls -al"
+}
 
 node('maven') {
   stage("Checkout") {
