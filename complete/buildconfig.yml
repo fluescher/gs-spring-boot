@@ -7,7 +7,7 @@ spec:
     contextDir: "complete"
     git:
       uri: https://github.com/fluescher/gs-spring-boot.git 
-      ref: "metrics"
+      ref: "master"
   strategy:
     jenkinsPipelineStrategy:
       jenkinsfilePath: "Jenkinsfile"
