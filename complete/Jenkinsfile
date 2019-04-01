@@ -1,3 +1,7 @@
+
+sh "ls -al"
+
+
 node('maven') {
   stage("Checkout") {
     git url: "https://github.com/fluescher/gs-spring-boot.git", branch: "master"
